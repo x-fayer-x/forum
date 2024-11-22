@@ -1,0 +1,244 @@
+<!Doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" content-type="text/html">
+    <title>Forum</title>
+    <link href="/assets/static/style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+
+<body class="page-forum">
+    <!--HEADER-->
+    <header>
+        <div class="container container-xlarge">
+            <div class="logo">
+                <h2><a href="/">Cyborum</a></h2>
+            </div>
+            <nav class="nav-header">
+                <ul class="menu">
+                    <li class="menu-item"><a href="home">Home</a></li>
+                    <li class="menu-item"><a href="forumin">Forum</a></li>
+                    <li class="menu-item"><a href="teamin">Team</a></li>
+                </ul>
+                <ul class="menu menu-social">
+                    <li class="menu-item"><a href="/users"><span class="material-symbols-outlined">
+                                account_circle
+                            </span></a></li>
+                    <li class="menu-item">
+                        <a href="login"><span class="material-symbols-outlined">
+                                logout
+                            </span></a>
+                    </li>
+            </nav>
+        </div>
+    </header>
+
+    <!--SECTION CONTENT-->
+    <section id="Content">
+
+        <!--SECTION FORUM-->
+        <section class="content-page section-border-bottom">
+            <div class="container">
+
+                <!--FORUM-->
+                <div class="forum">
+
+                    <!--FORUM FILTERS-->
+                    <div class="forum-filter">
+                        <nav class="forum-nav">
+                            <form action="/results" method="post">
+                                <ul class="forum-menu">
+                                    <li class="forum-menu-item">
+                                        <div>
+                                            <input type="checkbox" name="category-0" id="category-0" value="Animés"
+                                                checked>
+                                            <label class="checklabel" for="category-0">Animés</label>
+                                        </div>
+                                    </li>
+                                    <li class="forum-menu-item">
+                                        <div>
+                                            <input type="checkbox" name="category-1" id="category-1" value="Films"
+                                                checked>
+                                            <label class="checklabel" for="category-1">Films</label>
+                                        </div>
+                                    </li>
+                                    <li class="forum-menu-item">
+                                        <div>
+                                            <input type="checkbox" name="category-2" id="category-2" value="Jeux-Vidéos"
+                                                checked>
+                                            <label class="checklabel" for="category-2">Jeux-Vidéos</label>
+                                        </div>
+                                    </li>
+                                    <li class="forum-menu-item">
+                                        <div>
+                                            <input type="checkbox" name="category-3" id="category-3" value="Mangas"
+                                                checked>
+                                            <label class="checklabel" for="category-3">Mangas</label>
+                                        </div>
+                                    </li>
+                                    <li class="forum-menu-item">
+                                        <div>
+                                            <input type="checkbox" name="category-4" id="category-4" value="Musiques"
+                                                checked>
+                                            <label class="checklabel" for="category-4">Musiques</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <button type="submit" class="btn-filter">Filtrer</button>
+
+                            </form>
+                            <form action="/UserFilter" method="post">
+                                <div class="userfilter">
+                                    <button type="submit" name="filteruser" id="filteruser" class="btn-filter"
+                                        value="Mypost">My
+                                        Post</button>
+
+                                    <button type="submit" name="filteruser" id="filteruser" class="btn-filter"
+                                        value="likedpost">Liked/Disliked
+                                        Post</button>
+                                    <button type="submit" name="filteruser" id="filteruser" class="btn-filter"
+                                        value="Comment">Commented
+                                        Post</button>
+                                </div>
+                            </form>
+                        </nav>
+                        <!--END FILTERS-->
+                    </div>
+
+                    <!--FORUM CONTENT-->
+                    <div class="forum-content">
+
+                        <!--MESSAGE-->
+                        {{range .}}
+                        <div class="forum-msg">
+                            <div class="forum-msg-header">
+                                <p class="auteur">{{.UserName}}</p>
+                                <p class="date"> {{.Date}}</p>
+                                <div class="categories">
+                                    {{range .Category}}
+                                    <p class="category cat-mangas">{{.}}</p>
+                                    {{end}}
+                                </div>
+                            </div>
+                            <div class="forum-msg-content">
+                                <p class="msg">{{.Content}}</p>
+                            </div>
+                            <div class="forum-msg-footer">
+                                <div class="like">
+                                    <form action="/like">
+                                        <button type="submit" name="postId" value="{{.Id}}">
+                                            <span class="material-symbols-outlined">
+                                                thumb_up
+                                            </span>
+                                        </button>
+                                        <span class="count">{{.Like}}</span>
+                                    </form>
+                                </div>
+                                <div class="dislike">
+                                    <form action="/dislike">
+                                        <button type="submit" name="postId" value="{{.Id}}">
+                                            <span class="material-symbols-outlined">
+                                                thumb_down
+                                            </span>
+                                        </button>
+                                        <span class="count">{{.Dislike}}</span>
+                                    </form>
+                                </div>
+                                <div class="comment">
+                                    <span class="material-symbols-outlined">
+                                        mode_comment
+                                    </span>
+                                    <span class="count">{{.CommentNum}}</span>
+                                </div>
+                                <form action="/edit-comment" method="post">
+                                    <button type="submit" name="new-comment-1" value="{{.Id}}"
+                                        class="new-comment">Ajouter un commentaire</button>
+                                </form>
+                                <div class="comment-list">
+                                    {{range .Comment}}
+                                    <div class="comment-msg-header">
+                                        <p class="comment-msg">{{.UserName}}</p>
+                                        <p class="comment-msg">{{.Date}}</p>
+                                    </div>
+                                    <div class="comment-msg-content">
+                                        <p class="comment-msg">{{.Content}}</p>
+                                    </div>
+                                    <div class="comment-msg-footer">
+                                        <div class="like">
+                                            <form action="/commentslike">
+                                                <button type="submit" name="CommentId" value="{{.Id}}">
+                                                    <span class="material-symbols-outlined">
+                                                        thumb_up
+                                                    </span>
+                                                </button>
+                                                <span class="count">{{.Like}}</span>
+                                            </form>
+                                        </div>
+                                        <div class="dislike">
+                                            <form action="/commentsdislike">
+                                                <button type="submit" name="CommentId" value="{{.Id}}">
+                                                    <span class="material-symbols-outlined">
+                                                        thumb_down
+                                                    </span>
+                                                </button>
+                                                <span class="count">{{.Dislike}}</span>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    {{end}}
+                                </div>
+                            </div>
+                        </div>
+                        {{end}}
+                        <!--END CONTENT-->
+                    </div>
+
+                    <!--END FORUM-->
+                </div>
+
+            </div>
+            <!--END SECTION FORUM-->
+        </section>
+
+        <!--BTN EDIT POST-->
+        <div class="btn-edit-post">
+            <div class="btn">
+                <a href="edit-post">
+                    <span class="material-symbols-outlined">
+                        edit_square
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <!--END CONTENT-->
+    </section>
+    <!--FOOTER-->
+    <footer>
+        <div class="container container-xlarge">
+            <div class="logo">
+                <h2>Cyborum</h2>
+            </div>
+            <nav class="nav-footer">
+                <ul class="menu menu1">
+                    <li class="menu-item"><a href="/home">Home</a></li>
+                    <li class="menu-item"><a href="/forum">Forum</a></li>
+                    <li class="menu-item"><a href="/users">Profile</a></li>
+                    <li class="menu-item"><a href="/login">Login</a></li>
+                </ul>
+
+                <ul class="menu menu2">
+                    <li class="menu-item">Register</li>
+                    <li class="menu-item"><a href="/team">Team</a></li>
+                    <li class="menu-item">Confidentialité</li>
+                    <li class="menu-item">Cookie</li>
+                </ul>
+            </nav>
+        </div>
+        <div class="copyright">© 2023 | Cyborum | Conception : Jordan B - Lucas D - Louis V - Come L - Louis P </div>
+    </footer>
+</body>
+
+</html>
